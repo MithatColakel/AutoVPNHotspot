@@ -98,6 +98,13 @@ echo "[+] Servisler başlatılıyor..."
 sudo systemctl start wg-quick@wg0.service
 sudo systemctl start create_ap.service
 
+# --- 5. Ağ yapılandırması ---
+sudo iptables -t mangle -A PREROUTING -i $WIFI_IFACE -j TTL --ttl-set 65
+sudo iptables -t mangle -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
+sudo iptables -t nat -A POSTROUTING -o $INTERNET_IFACE -j MASQUERADE
+sudo ip link set dev $WIFI_IFACE mtu 1280
+sudo ip link set dev $INTERNET_IFACE mtu 1280
+
 # --- 6. Tamamlandı ---
 echo -e "\n✅ Kurulum tamamlandı!"
 echo "🌐 VPN bağlantısı ve Hotspot artık sistem başlangıcında otomatik olarak devreye girecek."
