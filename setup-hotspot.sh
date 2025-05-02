@@ -40,6 +40,7 @@ sudo tee /etc/wireguard/wg0.conf > /dev/null <<EOF
 PrivateKey = $WG_PRIVATE_KEY
 Address = $WG_ADDRESS
 DNS = 1.1.1.1
+MTU = 1420
 
 [Peer]
 PublicKey = $WG_PUBLIC_KEY
@@ -96,9 +97,6 @@ sudo systemctl enable create_ap.service
 echo "[+] Servisler başlatılıyor..."
 sudo systemctl start wg-quick@wg0.service
 sudo systemctl start create_ap.service
-
-sudo sysctl -w net.ipv6.conf.all.disable_ipv6=1
-sudo sysctl -w net.ipv6.conf.default.disable_ipv6=1
 
 # --- 6. Tamamlandı ---
 echo -e "\n✅ Kurulum tamamlandı!"
